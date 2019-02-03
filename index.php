@@ -9,7 +9,7 @@
 	</style>
 </head>
 <body>
-<script src="/js/three.min.js"></script>
+<script src="js/three.min.js"></script>
 
 
 
@@ -95,26 +95,45 @@ void main(){
         var scene;
         var camera;
         var renderer;
-console.log(THREE.ShaderLib);
-        function scene_setup(){
-            //This is all code needed to set up a basic ThreeJS scene
 
-            //First we initialize the scene and our camera
-            scene = new THREE.Scene();
-			scene.background = new THREE.Color( 0xffffff );
-            camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+scene = new THREE.Scene();
+scene.background = new THREE.Color( 0xffffff );
+camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
-            //We create the WebGL renderer and add it to the document
-            renderer = new THREE.WebGLRenderer();
-            renderer.setSize( window.innerWidth, window.innerHeight );
-            document.body.appendChild( renderer.domElement );
-        }
+//We create the WebGL renderer and add it to the document
+renderer = new THREE.WebGLRenderer();
+renderer.setSize( window.innerWidth, window.innerHeight );
+document.body.appendChild( renderer.domElement );
 
-        scene_setup();
+		
+		
+var path = "img/";
+var format = '.jpg';
+var urls = [ 
+path + 'left' + format, path + 'right' + format,
+path + 'up' + format, path + 'down' + format,
+path + 'back' + format, path + 'front' + format,
+];
+
+var textureCube = new THREE.CubeTextureLoader().load( urls );
+textureCube.mapping = THREE.CubeRefractionMapping;  console.log(THREE.ShaderLib);		
+		
+var shader = THREE.ShaderLib.cube;
+shader.uniforms.tCube.value = textureCube;
+
+var material = new THREE.ShaderMaterial({
+
+    fragmentShader: shader.fragmentShader,
+    vertexShader: shader.vertexShader,
+    uniforms: shader.uniforms,
+    depthWrite: false,
+    side: THREE.BackSide
+
+  });		
 
         //Add your code here!
-        var geometry = new THREE.BoxGeometry( 1, 1, 1 );
-        var material = new THREE.MeshBasicMaterial( { color: 0x00ff00} );//We make it green
+        var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+        
 		
 var uniforms = {
 
@@ -125,7 +144,7 @@ var uniforms = {
 	}		
 		
 		
-var material = new THREE.ShaderMaterial( {
+var material2 = new THREE.ShaderMaterial( {
 
 	uniforms: uniforms,
 
@@ -148,7 +167,7 @@ var material = new THREE.ShaderMaterial( {
 
         //Render everything!
         function render() {
-      cube.rotation.y += 0.05;
+      camera.rotation.y += 0.01;
 
 	
             requestAnimationFrame( render );
