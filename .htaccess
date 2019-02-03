@@ -1,0 +1,16 @@
+ErrorDocument 404 /include/404.php
+
+AddDefaultCharset utf-8
+Options -Indexes
+
+
+
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^www.test\.ru$ [NC]
+RewriteRule ^(.*)$ http://test.ru/$1 [R=301,L]
+
+
+
+RewriteRule ^upr[A-Za-z0-9-_/]*$ admin/views/page.php
+RewriteRule ^[A-Za-z0-9-_\/]+$ views/page.php
+
